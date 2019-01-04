@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Quiz</title>
+        <link rel="stylesheet" href="main.min.css">
+    </head>
+    <body>
+        <div id="quiz" class="quiz-wrapper">
+            <div class="header">
+                <div id="user-name" class="user-name"><span>_userName_</span></div>
+                <div id="score" class="user-score"><span id="score-label" class="score-label">_scoreLabel_</span>: <span id="score-number" class="score-number">0</span></div>
+            </div>
+            <div id="question" class="question-wrapper">
+                <h2></h2>
+                <div class="answers">
+                    <div id="answer1" class="answer-wrapper">
+                        <input type="radio" id="answer1" name="answer" class="user-answer" value="1">
+                        <label for="answer1"></label>
+                    </div>
+                    <div id="answer2" class="answer-wrapper">
+                        <input type="radio" id="answer2" name="answer" class="user-answer" value="2">
+                        <label for="answer2"></label>
+                    </div>
+                    <div id="answer3" class="answer-wrapper">
+                        <input type="radio" id="answer3" name="answer" class="user-answer" value="3">
+                        <label for="answer3"></label>
+                    </div>
+                    <button id="submit" type="submit" name="button" class="submit">_nextLabel_ &gt;&gt;</button>
+                </div>
+            </div>
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>
