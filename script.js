@@ -1,13 +1,67 @@
-const questions = [
+const questions_en = [
     ['question1','answer1-1', 'answer1-2', 'answer1-3',2],
     ['question2','answer2-1', 'answer2-2', 'answer2-3',1],
     ['question3','answer3-1', 'answer3-2', 'answer3-3',2],
     ['question4','answer4-1', 'answer4-2', 'answer4-3',3]
 ];
 
+const questions_pl = [
+    ['pytanie1','odpowiedź1-1', 'odpowiedź1-2', 'odpowiedź1-3',2],
+    ['pytanie2','odpowiedź2-1', 'odpowiedź2-2', 'odpowiedź2-3',1],
+    ['pytanie3','odpowiedź3-1', 'odpowiedź3-2', 'odpowiedź3-3',2],
+    ['pytanie4','odpowiedź4-1', 'odpowiedź4-2', 'odpowiedź4-3',3]
+];
+
 let userScore = 0,
     currentQuestion = 0,
+    questions = [],
+    questionLang,
+    userNameValue,
+    htmlLang,
     htmlTag = document.querySelector('html');
+
+
+const langpacks = {
+    'en': {
+        'nameLabel': 'Name',
+        'scoreLabel': 'Score',
+        'nextLabel': 'Next',
+        'enterNameLabel': 'Enter Your name:',
+        'selectAnswerLebel': 'Please select answer',
+        'finishedQuizLabel': 'You finished the quiz'
+    },
+    'pl': {
+        'nameLabel': 'Imię',
+        'scoreLabel': 'Wynik',
+        'nextLabel': 'Dalej',
+        'enterNameLabel': 'Wpisz swoje imię',
+        'selectAnswerLebel': 'Wybierz odpowiedź',
+        'finishedQuizLabel': 'Quiz zakończony'
+    }
+}
+
+const getLangQuestions = () => {
+    if(htmlTag.getAttribute('lang') == 'en') {
+        questions = questions_en.slice();
+        htmlLang = langpacks.en;
+    } else if(htmlTag.getAttribute('lang') == 'pl') {
+        questions = questions_pl.slice();
+        htmlLang = langpacks.pl;
+    } else {
+        questions = questions_en.slice();
+        htmlLang = langpacks.en;
+    }
+}
+getLangQuestions();
+
+document.querySelector('#user-name-label').textContent = htmlLang.nameLabel;
+document.querySelector('#score-label').textContent = htmlLang.scoreLabel;
+document.querySelector('#submit').textContent = htmlLang.nextLabel + ' >>';
+
+const getUserName = () => {
+    userNameValue = prompt(htmlLang.enterNameLabel);
+    document.querySelector('#user-name-value').textContent = userNameValue;
+}
 
 const getQuestion = () => {
     let question = document.querySelector('#question'),
@@ -23,19 +77,6 @@ const getQuestion = () => {
     ans1Txt.textContent = questions[currentQuestion][1];
     ans2Txt.textContent = questions[currentQuestion][2];
     ans3Txt.textContent = questions[currentQuestion][3];
-}
-
-const langpacks = {
-    'en': {
-        'nameLabel': 'Name',
-        'scoreLabel': 'Score',
-        'nextLabel': 'Next'
-    },
-    'pl': {
-        'nameLabel': 'Imię',
-        'scoreLabel': 'Wynik',
-        'nextLabel': 'Dalej'
-    }
 }
 
 const updateUserScore = (score) => {
@@ -69,10 +110,12 @@ const onSubmit = () => {
     }
 
     if(document.querySelector('.user-answer:checked') == null) {
-        alert('Please select answer');
+        alert(htmlLang.selectAnswerLebel);
     } else if(userAnswer != correctAnswer) {
         userAnswerLabel.style.color = '#ff0000';
+        userAnswerLabel.style.fontWeight = 'bold';
         correctAnswerLabel.style.color = 'green';
+        correctAnswerLabel.style.fontWeight = 'bold';
         currentQuestion++;
         console.log('incorrect');
         setTimeout(function(){
@@ -81,12 +124,13 @@ const onSubmit = () => {
                 getQuestion();
             } else if(currentQuestion == questions.length) {
                 currentQuestion = 0;
-                alert('You finished the quiz');
+                alert(htmlLang.finishedQuizLabel);
                 getQuestion();
             }
         },1000);
     } else if(userAnswer == correctAnswer) {
         correctAnswerLabel.style.color = 'green';
+        correctAnswerLabel.style.fontWeight = 'bold';
         currentQuestion++;
         userScore++;
         updateUserScore(userScore);
@@ -97,7 +141,7 @@ const onSubmit = () => {
                 getQuestion();
             } else if(currentQuestion == questions.length) {
                 currentQuestion = 0;
-                alert('You finished the quiz');
+                alert(htmlLang.finishedQuizLabel);
                 getQuestion();
                 userScore = 0;
                 updateUserScore(userScore);
@@ -110,35 +154,5 @@ const onSubmit = () => {
 document.querySelector('.submit').addEventListener('click',function(){
     onSubmit();
 });
-
-if(htmlTag.getAttribute('lang') == 'en') {
-
-    let userName = document.querySelector('#user-name span').textContent;
-    userName = userName.replace('_userName_',langpacks.en.nameLabel);
-    document.querySelector('#user-name span').textContent = userName;
-
-    let userScoreLabel = document.querySelector('#score-label').textContent;
-    userScoreLabel = userScoreLabel.replace('_scoreLabel_',langpacks.en.scoreLabel);
-    document.querySelector('#score-label').textContent = userScoreLabel;
-
-    let userNextLabel = document.querySelector('#submit').textContent;
-    userNextLabel = userNextLabel.replace('_nextLabel_',langpacks.en.nextLabel);
-    document.querySelector('#submit').textContent = userNextLabel;
-
-} else if(htmlTag.getAttribute('lang') == 'pl') {
-
-    let userName = document.querySelector('#user-name span').textContent;
-    userName = userName.replace('_userName_',langpacks.pl.nameLabel);
-    document.querySelector('#user-name span').textContent = userName;
-
-    let userScoreLabel = document.querySelector('#score-label').textContent;
-    userScoreLabel = userScoreLabel.replace('_scoreLabel_',langpacks.pl.scoreLabel);
-    document.querySelector('#score-label').textContent = userScoreLabel;
-
-    let userNextLabel = document.querySelector('#submit').textContent;
-    userNextLabel = userNextLabel.replace('_nextLabel_',langpacks.pl.nextLabel);
-    document.querySelector('#submit').textContent = userNextLabel;
-
-}
-
+//getUserName();
 getQuestion();
